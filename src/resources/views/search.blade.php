@@ -108,7 +108,7 @@
           <span v-if="loading" class="spinner" aria-hidden="true"></span>
         </div>
 
-        <div v-if="!loading && results.length === 0" class="no-results">
+        <div v-if="searched && !loading && results.length === 0" class="no-results">
           No results found
         </div>
 
@@ -161,6 +161,7 @@
               loading: false,
               sortKey: null,
               sortDir: 1,
+              searched: false,
             };
           },
           methods: {
@@ -181,6 +182,7 @@
             },
             async search() {
               this.loading = true;
+              this.searched = true;
               this.results = [];
               try {
                 const resp = await axios.get('/api/properties', { params: this.buildQuery() });
@@ -195,6 +197,7 @@
             reset() {
               this.filters = {name:'',bedrooms:null,bathrooms:null,storeys:null,garages:null,price_min:null,price_max:null};
               this.results = [];
+              this.searched = false;
             },
             sortBy(key) {
               if (this.sortKey === key) {
